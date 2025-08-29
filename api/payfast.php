@@ -3,11 +3,11 @@
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     // --- Dynamic Origin Configuration ---
     // Use Render's built-in environment variable for the production URL.
-    $appUrl = getenv('RENDER_EXTERNAL_URL');
-    $allowed_origins = ['https://payfast-react-php-app.onrender.com']; // Allow local development
-    if ($appUrl) {
+    $renderUrl = getenv('RENDER_EXTERNAL_URL');
+    $allowed_origins = ['http://localhost:3000']; // Always allow local development
+    if ($renderUrl) {
         // The RENDER_EXTERNAL_URL does not include the protocol, so we must add it.
-        $allowed_origins[] = 'https://' . $appUrl;
+        $allowed_origins[] = 'https://' . $renderUrl;
     }
 
     if (in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
@@ -41,8 +41,8 @@ $passphrase = getenv('PAYFAST_PASSPHRASE') ?: 'Work_2000100';
 $isSandbox = true;
 $payfastUrl = $isSandbox ? 'https://sandbox.payfast.co.za/eng/process' : 'https://www.payfast.co.za/eng/process';
 
-// Use the production URL if available, otherwise fallback to localhost for development.
-$baseUrl = getenv('RENDER_EXTERNAL_URL') ?: 'http://localhost:3000';
+// The $renderUrl variable is already defined in the CORS section above.
+$baseUrl = $renderUrl ? 'https://' . $renderUrl : 'http://localhost:3000'; // Use it to build the base URL.
 
 // --- Payment Data ---
 // In a real application, this data would come from your database or user session.
