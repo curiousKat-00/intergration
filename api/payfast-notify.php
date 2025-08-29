@@ -73,9 +73,14 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
 $response = curl_exec($ch);
+
+if ($response === false) {
+    pflog("cURL Error during validation: " . curl_error($ch));
+}
+
 curl_close($ch);
 
-pflog("Validation response from PayFast: " . $response);
+pflog("Validation response from PayFast: " . ($response ?: 'false'));
 
 // --- Process the Transaction ---
 if ($response === 'VALID') {
