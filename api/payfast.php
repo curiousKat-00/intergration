@@ -59,7 +59,7 @@ $paymentData = [
 
     // Transaction details (example)
     'm_payment_id' => 'ORDER_'.uniqid(), // A unique payment ID for your records
-    'amount' => '249.99',
+    'amount' => number_format(249.99, 2, '.', ''), // Ensure two decimal places
     'item_name' => 'Annual Subscription'
 ];
 

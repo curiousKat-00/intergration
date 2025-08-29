@@ -30,9 +30,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache's rewrite module for .htaccess to work
-RUN a2enmod rewrite \
-    # This is the key change: enable .htaccess files by changing AllowOverride from None to All
-    && sed -i '/<Directory \\/var\\/www\\/>/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+RUN a2enmod rewrite
+
+# Copy our custom virtual host configuration to overwrite the default site config.
+COPY apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 
 # Set the working directory for Apache
 WORKDIR /var/www/html

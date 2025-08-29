@@ -1,10 +1,14 @@
-<IfModule mod_rewrite.c>
-  RewriteEngine On
+RewriteEngine On
 
-  # If the request is NOT for the api, AND it's not for an existing file, AND it's not for an existing directory...
-  RewriteCond %{REQUEST_URI} !^/api/
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  # ...then rewrite it to index.html to be handled by React Router.
-  RewriteRule . /index.html [L]
-</IfModule>
+# 1. Do not rewrite requests for the API directory.
+# The [L] flag means "last rule," so it stops processing.
+RewriteRule ^api/ - [L]
+
+# 2. Do not rewrite if the request is for an existing file or directory.
+# This handles static assets like images, css, etc.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 3. For all other requests, rewrite to index.html for React Router.
+RewriteRule ^ /index.html [L]
