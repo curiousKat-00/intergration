@@ -4,7 +4,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     // --- PRODUCTION SECURITY ---
     // Whitelist your React app's production domain.
     // Replace 'https://your-app-name.onrender.com' with your actual frontend URL.
-    $allowed_origin = 'https://your-app-name.onrender.com';
+    $allowed_origin = 'https://payfast-react-php-app.onrender.com';
     if ($_SERVER['HTTP_ORIGIN'] === 'http://localhost:3000') {
         $allowed_origin = 'http://localhost:3000'; // Allow for local development
     }
