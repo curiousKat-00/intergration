@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: payfast-react-php-app
+    env: php
+    plan: free # Or your preferred plan
+    buildCommand: |
+      # 1. Install React dependencies
+      npm install
+      # 2. Build the React app for production
+      npm run build
+      # 3. Move the PHP api folder into the build directory so it's served
+      mv api build/
+    # Use our custom router to serve the React app and the API
+    startCommand: php -S 0.0.0.0:10000 router.php
+    envVars:
+      - key: PAYFAST_MERCHANT_ID
+        fromService:
+          type: web
+          name: payfast-react-php-app
+          envVarKey: PAYFAST_MERCHANT_ID_SECRET
+      - key: PAYFAST_MERCHANT_KEY
+        fromService:
+          type: web
+          name: payfast-react-php-app
+          envVarKey: PAYFAST_MERCHANT_KEY_SECRET
+      - key: PAYFAST_PASSPHRASE
+        fromService:
+          type: web
+          name: payfast-react-php-app
+          envVarKey: PAYFAST_PASSPHRASE_SECRET
