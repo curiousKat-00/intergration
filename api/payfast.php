@@ -65,13 +65,16 @@ $paymentData = [
 
 // --- Signature Generation ---
 function generateSignature($data, $passphrase = '') {
+    // Sort the data array alphabetically by key. This is crucial for a valid signature.
+    ksort($data);
+
     $output = '';
     foreach ($data as $key => $val) {
         if ($val !== '') {
             $output .= $key . '=' . urlencode(trim($val)) . '&';
         }
     }
-
+    
     $getString = substr($output, 0, -1); // Remove last ampersand
     if (!empty($passphrase)) {
         $getString .= '&passphrase=' . urlencode(trim($passphrase));
