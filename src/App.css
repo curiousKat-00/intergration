@@ -28,6 +28,20 @@
   color: #61dafb;
 }
 
+.payment-button {
+  background-color: #61dafb;
+  color: #282c34;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-decoration: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
