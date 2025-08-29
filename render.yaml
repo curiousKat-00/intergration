@@ -1,7 +1,7 @@
 services:
   - type: web
     name: payfast-react-php-app
-    env: php
+    runtime: php
     plan: free # Or your preferred plan
     buildCommand: |
       # 1. Install React dependencies
