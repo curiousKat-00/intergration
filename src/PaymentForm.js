@@ -8,7 +8,6 @@ function PaymentForm() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       setError(null);
       try {
         const response = await fetch('/api/payfast.php');
@@ -55,7 +54,7 @@ function PaymentForm() {
         {Object.entries(formData).map(([key, value]) => (
           <input key={key} type="hidden" name={key} value={String(value)} />
         ))}
-        <button type="submit" className="payment-button">Pay Now</button>
+        <button type="submit" className="App-link" style={{fontSize: '1.2rem', padding: '10px 20px'}}>Pay Now</button>
       </form>
     </>
   );
