@@ -1,14 +1,17 @@
 <?php
 // Allow from any origin
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-    // --- PRODUCTION SECURITY ---
-    // Whitelist your React app's production domain.
-    // Replace 'https://your-app-name.onrender.com' with your actual frontend URL.
-    $allowed_origin = 'https://payfast-react-php-app.onrender.com';
-    if ($_SERVER['HTTP_ORIGIN'] === 'http://localhost:3000') {
-        $allowed_origin = 'http://localhost:3000'; // Allow for local development
+    // --- Dynamic Origin Configuration ---
+    // Use Render's built-in environment variable for the production URL.
+    $appUrl = getenv('RENDER_EXTERNAL_URL');
+    $allowed_origins = ['http://localhost:3000']; // Allow local dev
+    if ($appUrl) {
+        $allowed_origins[] = $appUrl;
     }
-    header("Access-Control-Allow-Origin: " . $allowed_origin);
+
+    if (in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    }
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
@@ -37,16 +40,18 @@ $passphrase = getenv('PAYFAST_PASSPHRASE') ?: 'Work_2000100';
 $isSandbox = true;
 $payfastUrl = $isSandbox ? 'https://sandbox.payfast.co.za/eng/process' : 'https://www.payfast.co.za/eng/process';
 
+// Use the production URL if available, otherwise fallback to localhost for development.
+$baseUrl = getenv('RENDER_EXTERNAL_URL') ?: 'http://localhost:3000';
+
 // --- Payment Data ---
 // In a real application, this data would come from your database or user session.
 $paymentData = [
     'merchant_id' => $merchantId,
     'merchant_key' => $merchantKey,
-    // --- PRODUCTION URLS ---
-    // Replace 'your-app-name.onrender.com' with your actual Render service URL.
-    'return_url' => 'https://your-app-name.onrender.com/payment-success',
-    'cancel_url' => 'https://your-app-name.onrender.com/payment-cancelled',
-    'notify_url' => 'https://your-app-name.onrender.com/api/payfast-notify.php',
+    // --- DYNAMIC URLS ---
+    'return_url' => $baseUrl . '/payment-success',
+    'cancel_url' => $baseUrl . '/payment-cancelled',
+    'notify_url' => $baseUrl . '/api/payfast-notify.php',
 
     // Buyer details (example)
     'name_first' => 'John',

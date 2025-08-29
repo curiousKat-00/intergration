@@ -22,8 +22,12 @@ RUN npm run build
 # Use an official PHP image with Apache
 FROM php:8.1-apache
 
-# Install the cURL extension needed for the PayFast ITN script
-RUN docker-php-ext-install curl
+# Install system dependencies for PHP extensions, then install the extensions.
+# The cURL extension is needed for the PayFast ITN script.
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    && docker-php-ext-install curl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache's rewrite module for .htaccess to work
 RUN a2enmod rewrite
