@@ -42,4 +42,3 @@ WORKDIR /var/www/html
 RUN rm -rf /var/www/html/*
 COPY --from=builder /app/build /var/www/html/
 COPY --from=builder /app/api /var/www/html/api/
-COPY --from=builder /app/.htaccess /var/www/html/

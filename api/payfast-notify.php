@@ -34,6 +34,9 @@ pflog("Received POST data: " . print_r($pfData, true));
 
 // 2. Generate signature from received data (excluding the received signature)
 function generateSignature($data, $passphrase = '') {
+    // Sort the data array alphabetically by key. This is crucial for a valid signature.
+    ksort($data);
+
     $output = '';
     foreach ($data as $key => $val) {
         if ($key !== 'signature') {
