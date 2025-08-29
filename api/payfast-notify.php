@@ -20,11 +20,9 @@ $isSandbox = true;
 $pfHost = $isSandbox ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
 
 // --- Data Validation ---
-// 1. Sanitize and validate incoming POST data
-$pfData = [];
-foreach ($_POST as $key => $value) {
-    $pfData[$key] = stripslashes($value);
-}
+// 1. Get the raw POST data from PayFast. The stripslashes function is not needed
+// as magic_quotes is deprecated and removed in modern PHP.
+$pfData = $_POST;
 
 if (empty($pfData) || !isset($pfData['payment_status'])) {
     pflog("Error: Invalid POST data received.");

@@ -4,9 +4,10 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     // --- Dynamic Origin Configuration ---
     // Use Render's built-in environment variable for the production URL.
     $appUrl = getenv('RENDER_EXTERNAL_URL');
-    $allowed_origins = ['http://localhost:3000']; // Allow local dev
+    $allowed_origins = ['http://localhost:3000']; // Allow local development
     if ($appUrl) {
-        $allowed_origins[] = $appUrl;
+        // The RENDER_EXTERNAL_URL does not include the protocol, so we must add it.
+        $allowed_origins[] = 'https://' . $appUrl;
     }
 
     if (in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
