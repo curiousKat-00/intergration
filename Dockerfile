@@ -30,9 +30,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache's rewrite module for .htaccess to work
-# and copy our custom Apache config to enable .htaccess overrides. This is more reliable than using sed.
-RUN a2enmod rewrite
-COPY config/000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite \
+    # This is the key change: enable .htaccess files by changing AllowOverride from None to All
+    && sed -i '/<Directory \\/var\\/www\\/>/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
 # Set the working directory for Apache
 WORKDIR /var/www/html
