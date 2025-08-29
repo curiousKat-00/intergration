@@ -1,0 +1,11 @@
+# Turn on URL rewriting
+RewriteEngine On
+
+# Don't rewrite requests for files or directories that exist
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# For everything else, rewrite the request to index.html
+# This allows the React Router to handle the URL.
+RewriteRule ^ index.html [L]
