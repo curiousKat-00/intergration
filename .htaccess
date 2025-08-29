@@ -1,13 +1,10 @@
-# Turn on URL rewriting
-RewriteEngine On
+<IfModule mod_rewrite.c>
+  RewriteEngine On
 
-# Explicitly check if the request URI is for the /api/ folder.
-# If it is, do not apply any more rewrite rules.
-RewriteCond %{REQUEST_URI} ^/api/ [NC]
-RewriteRule ^ - [L]
-
-# For all other requests, if the file or directory doesn't exist,
-# forward the request to index.html for React Router to handle.
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.html [L]
+  # If the request is NOT for the api, AND it's not for an existing file, AND it's not for an existing directory...
+  RewriteCond %{REQUEST_URI} !^/api/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  # ...then rewrite it to index.html to be handled by React Router.
+  RewriteRule . /index.html [L]
+</IfModule>

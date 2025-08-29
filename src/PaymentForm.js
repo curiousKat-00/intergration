@@ -7,23 +7,32 @@ function PaymentForm() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // This relative path will be proxied in development and work directly in production.
-    fetch('/api/payfast.php')
-      .then(response => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('/api/payfast.php');
+        // Always read the response as text first to avoid parsing errors on non-JSON responses.
+        const responseText = await response.text();
+
         if (!response.ok) {
-          throw new Error('Network response was not ok. Is the PHP server running?');
+          throw new Error(`Network error: ${response.status} ${response.statusText}. Response: ${responseText}`);
         }
-        return response.json();
-      })
-      .then(data => {
+
+        // Now, safely try to parse the text as JSON.
+        const data = JSON.parse(responseText);
         setPayfastData(data);
+
+      } catch (err) {
+        // This will catch both network errors and JSON parsing errors.
+        console.error("Failed to fetch or parse PayFast data:", err);
+        setError('Failed to load payment form. The server may be misconfigured. Please check the console.');
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to fetch PayFast data:", err);
-        setError('Failed to load payment form. Please check the console for details.');
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (loading) {
