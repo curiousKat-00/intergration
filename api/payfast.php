@@ -10,12 +10,12 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     if ($renderUrl) {
         $allowed_origins[] = $baseUrl; // Add the production URL.
     }
-    
+
     if (in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400'); // cache for 1 day
     }
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
 
 // Access-Control headers are received during OPTIONS requests
